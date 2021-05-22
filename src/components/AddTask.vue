@@ -33,8 +33,11 @@
         border-radius: 6px;
         background: #ecf0f3;
         border: none;
+        border: 2px solid #ecf0f3;
       }
       input:focus {
+        outline: #aeadf6;
+        border: 2px solid #aeadf6;
       }
       button {
         margin: 10px;
