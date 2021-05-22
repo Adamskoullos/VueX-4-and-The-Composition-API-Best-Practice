@@ -1,13 +1,20 @@
 <template>
-  <h1>Todo List One</h1>
+  <div class="container-todo">
+    <AddTask />
+  </div>
 </template>
 
 <script>
-  export default {};
+  import AddTask from "../components/AddTask.vue";
+
+  export default {
+    components: { AddTask },
+  };
 </script>
 
 <style lang="scss">
-  h1 {
-    margin: auto;
+  .container-todo {
+    // background: orangered;
+    margin: 40px 50px;
   }
 </style>

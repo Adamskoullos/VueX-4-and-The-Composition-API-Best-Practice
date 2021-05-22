@@ -20,13 +20,13 @@
     height: 100px;
 
     h2 {
-      margin: auto auto auto 50px;
+      margin: auto auto auto 60px;
       font-weight: 500;
       font-size: 28px;
     }
 
     #nav {
-      margin: auto 50px auto auto;
+      margin: auto 40px auto auto;
       display: flex;
       align-items: center;
 
