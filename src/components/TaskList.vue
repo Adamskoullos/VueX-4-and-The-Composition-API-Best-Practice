@@ -1,5 +1,5 @@
 <template>
-  <div class="task-list">
+  <div class="task-list" v-if="store">
     <div class="task" v-for="todo in store.todos" :key="todo.id">
       <p>{{ todo.text }}</p>
       <span class="material-icons outline">check_box_outline_blank</span>

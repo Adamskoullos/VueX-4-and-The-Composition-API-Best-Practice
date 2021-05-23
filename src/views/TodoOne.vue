@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import { onBeforeMount, onMounted } from "@vue/runtime-core";
+  import { onBeforeMount, onMounted, onUpdated } from "@vue/runtime-core";
   import AddTask from "../components/AddTask.vue";
   import TaskList from "../components/TaskList.vue";
   import { useStore } from "vuex";
@@ -17,10 +17,14 @@
       const store = useStore();
 
       const fetchData = () => {
-        store.dispatch("fetchTodosData");
+        store.dispatch("fetchTodoOne");
       };
 
       onBeforeMount(() => {
+        fetchData();
+      });
+
+      onUpdated(() => {
         fetchData();
       });
 

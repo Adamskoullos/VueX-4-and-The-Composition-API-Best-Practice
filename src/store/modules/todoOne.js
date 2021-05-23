@@ -10,9 +10,7 @@ export const todoOne = {
   },
   mutations: {
     setTodosData(state, data) {
-      console.log("mutations: ", data);
       state.todos = data;
-      console.log(state.todos);
     },
     setIsLoading(state, boolean) {
       state.isLoading = boolean;
@@ -22,7 +20,7 @@ export const todoOne = {
     },
   },
   actions: {
-    async fetchTodosData(ctx) {
+    async fetchTodoOne(ctx) {
       ctx.commit("setIsLoading", true);
       ctx.commit("setError", "");
       try {

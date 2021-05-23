@@ -1,16 +1,35 @@
 <template>
   <div class="container-todo">
     <AddTask />
-    <TaskList />
+    <TaskList :store="store.state.todoTwo" />
   </div>
 </template>
 
 <script>
+  import { onBeforeMount, onUpdated } from "@vue/runtime-core";
   import AddTask from "../components/AddTask.vue";
   import TaskList from "../components/TaskList.vue";
+  import { useStore } from "vuex";
 
   export default {
     components: { AddTask, TaskList },
+    setup() {
+      const store = useStore();
+
+      const fetchData = () => {
+        store.dispatch("fetchTodoTwo");
+      };
+
+      onBeforeMount(() => {
+        fetchData();
+      });
+
+      onUpdated(() => {
+        fetchData();
+      });
+
+      return { store };
+    },
   };
 </script>
 
