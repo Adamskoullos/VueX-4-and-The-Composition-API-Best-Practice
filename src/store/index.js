@@ -1,12 +1,8 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
+import { todoOne } from "./modules/todoOne";
 
-export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+export const store = createStore({
   modules: {
-  }
-})
+    todoOne,
+  },
+});

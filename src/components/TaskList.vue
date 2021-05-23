@@ -42,13 +42,16 @@
         font-size: 32px;
         color: #81e597;
         border-radius: 4px;
+        cursor: pointer;
       }
       span.outline {
         color: #e5e8ea;
+        cursor: pointer;
       }
       span.edit {
         font-size: 26px;
         color: #8288a1;
+        cursor: pointer;
       }
     }
   }

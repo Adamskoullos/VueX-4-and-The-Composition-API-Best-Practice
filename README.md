@@ -23,16 +23,21 @@ A Todo application mapping VueX processes for each CRUD workflow. The project to
 4. Identify the Components to be used
 5. setup the router and test
 
-6. Build out the VueX modules (one for each Todo list) and wire up as I go:
+6. Basic styling for app.vue, NavBar, AddTask, Single Todo
 
-   - Once the workflow to pull in the data from the end point is in place, get some styling done for what can be done at that point
-   - Work through each CRUD workflow working it out as I go
+7. Build out the VueX modules (one for each Todo list) and wire up as I go:
 
-7. Loaders & Transitions
+   - Initial fetch on mount workflow to retrieve and render task list
+   - Update task to toggle complete property plus styling
+   - Update task to alter text content
+   - Add new task workflow plus styling
+   - Remove task workflow
 
-8. Testing
+8. Loaders, Transitions & Hovers
 
-9. Deployment
+9. Testing
+
+10. Deployment
 
 ## Research Stage
 
@@ -42,7 +47,7 @@ My research into the core VueX principles and workflows can be found here: https
 
 2. API end-points
 
-I couldn't use the basic json-placeholder api's as I needed two and also need to save db state. I also didn't want to use local storage as the whole point is to model real life workflows. This meant using Axios/Fetch with the async try/catch pattern each time connecting to the db and also dealing with updating the VueX store each time.
+I couldn't use the basic json-placeholder api's as I needed two and also need to save db state. I also didn't want to use local storage or Firebase as the whole point is to model workflows working with Rest api's. This meant using Axios/Fetch with the async try/catch pattern each time connecting to the db and also dealing with updating the VueX store each time.
 
 Ania Kubow has a great YouTube video detailing how to make mock api's and deploy them to Heroku: https://www.youtube.com/watch?v=FLnxgSZ0DG4
 

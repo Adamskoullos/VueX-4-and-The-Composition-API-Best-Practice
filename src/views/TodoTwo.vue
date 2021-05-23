@@ -1,9 +1,22 @@
 <template>
-  <h1>Todo List Two</h1>
+  <div class="container-todo">
+    <AddTask />
+    <TaskList />
+  </div>
 </template>
 
 <script>
-  export default {};
+  import AddTask from "../components/AddTask.vue";
+  import TaskList from "../components/TaskList.vue";
+
+  export default {
+    components: { AddTask, TaskList },
+  };
 </script>
 
-<style lang="SCSS"></style>
+<style lang="scss">
+  .container-todo {
+    // background: orangered;
+    margin: 40px 50px;
+  }
+</style>
