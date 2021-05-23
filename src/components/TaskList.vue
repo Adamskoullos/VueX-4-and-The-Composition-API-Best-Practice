@@ -1,7 +1,7 @@
 <template>
   <div class="task-list">
-    <div class="task">
-      <p>Task number one</p>
+    <div class="task" v-for="todo in store.todos" :key="todo.id">
+      <p>{{ todo.text }}</p>
       <span class="material-icons outline">check_box_outline_blank</span>
       <span class="material-icons">check_box</span>
       <span class="material-icons edit">edit</span>
@@ -10,7 +10,9 @@
 </template>
 
 <script>
-  export default {};
+  export default {
+    props: ["store"],
+  };
 </script>
 
 <style lang="scss">

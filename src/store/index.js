@@ -1,8 +1,10 @@
 import { createStore } from "vuex";
-import { todoOne } from "./modules/todoOne";
+import { todoOne } from "./modules/todoOne.js";
 
-export const store = createStore({
+const store = createStore({
   modules: {
     todoOne,
   },
 });
+
+export default store;

@@ -10,7 +10,9 @@ export const todoOne = {
   },
   mutations: {
     setTodosData(state, data) {
+      console.log("mutations: ", data);
       state.todos = data;
+      console.log(state.todos);
     },
     setIsLoading(state, boolean) {
       state.isLoading = boolean;
