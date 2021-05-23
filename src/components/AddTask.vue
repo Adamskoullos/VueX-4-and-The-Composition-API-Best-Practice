@@ -1,21 +1,28 @@
 <template>
-  <div class="container-add-task">
+  <form class="container-add-task" @submit.prevent="handleSubmit">
     <h3>Create a new task</h3>
     <div class="input-div">
       <input type="text" />
       <button>Add</button>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
-  export default {};
+  export default {
+    setup() {
+      const handleSubmit = async () => {};
+
+      return { handleSubmit };
+    },
+  };
 </script>
 
 <style lang="scss">
   .container-add-task {
     max-width: 900px;
     margin: auto;
+    margin-bottom: 50px;
 
     h3 {
       font-weight: 400;

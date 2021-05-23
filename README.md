@@ -28,9 +28,11 @@ A Todo application mapping VueX processes for each CRUD workflow. The project to
    - Once the workflow to pull in the data from the end point is in place, get some styling done for what can be done at that point
    - Work through each CRUD workflow working it out as I go
 
-7. Testing
+7. Loaders & Transitions
 
-8. Deployment
+8. Testing
+
+9. Deployment
 
 ## Research Stage
 
