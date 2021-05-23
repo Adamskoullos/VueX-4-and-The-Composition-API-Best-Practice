@@ -1,17 +1,42 @@
 <template>
-  <div class="task-list" v-if="store">
-    <div class="task" v-for="todo in store.todos" :key="todo.id">
+  <div class="task-list" v-if="st.todos">
+    <div class="task" v-for="todo in st.todos" :key="todo.id">
       <p>{{ todo.text }}</p>
-      <span class="material-icons outline">check_box_outline_blank</span>
-      <span class="material-icons">check_box</span>
+      <span
+        class="material-icons outline"
+        v-if="!todo.complete"
+        @click="handleComplete(todo)"
+        >check_box_outline_blank</span
+      >
+      <span
+        class="material-icons"
+        v-if="todo.complete"
+        @click="handleComplete(todo)"
+        >check_box</span
+      >
       <span class="material-icons edit">edit</span>
     </div>
+  </div>
+  <div v-else>
+    <h1>Loading...</h1>
   </div>
 </template>
 
 <script>
+  import { useStore } from "vuex";
+
   export default {
-    props: ["store"],
+    // props: ["store"],
+    setup() {
+      const store = useStore();
+      const st = store.state.todoOne;
+
+      const handleComplete = (todo) => {
+        store.dispatch("toggleCompleteOne", todo);
+      };
+
+      return { handleComplete, st };
+    },
   };
 </script>
 

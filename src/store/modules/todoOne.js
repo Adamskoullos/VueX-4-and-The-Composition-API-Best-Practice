@@ -37,6 +37,18 @@ export const todoOne = {
         ctx.commit("setIsLoading", false);
       }
     },
+    async toggleCompleteOne(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ complete: !todo.complete }),
+        });
+        await ctx.dispatch("fetchTodoOne");
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   getters: {},
 };

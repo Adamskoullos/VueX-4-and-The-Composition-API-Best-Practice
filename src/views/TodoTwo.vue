@@ -1,18 +1,18 @@
 <template>
   <div class="container-todo">
     <AddTask />
-    <TaskList :store="store.state.todoTwo" />
+    <TaskListTwo :store="store.state.todoTwo" />
   </div>
 </template>
 
 <script>
   import { onBeforeMount, onUpdated } from "@vue/runtime-core";
   import AddTask from "../components/AddTask.vue";
-  import TaskList from "../components/TaskList.vue";
+  import TaskListTwo from "../components/TaskListTwo.vue";
   import { useStore } from "vuex";
 
   export default {
-    components: { AddTask, TaskList },
+    components: { AddTask, TaskListTwo },
     setup() {
       const store = useStore();
 

@@ -57,4 +57,137 @@ I did this and the process to build the two mock api's used for this project can
 
 - https://github.com/Adamskoullos/mock-api-two
 
-### Development Stage
+## Development Stage
+
+This sections covers noteworthy parts of the build process.
+
+**Issue**: When using modules and namespace scoping there is a best practice to target the properties of a specific module:
+
+```js
+const fetchData = () => {
+  store.dispatch("moduleName/actionFunction");
+};
+```
+
+Unfortunately prefixing the action with the module name was creating errors for me, I am assuming this is because I have got something else not quite right elsewhere. I moved on from this by giving the relevant actions different names in each module: `fetchTodoOne` & `fetchTodoTwo`. This is the only change needed as all other naming is within the modules, hence scoped.
+
+**Fetching data on initial load**
+
+Each todo view/page has the following pattern which is triggered by the Vue lifecycle hook `onBeforeMount`:
+
+```js
+<template>
+  <div class="container-todo">
+    <AddTask />
+    <TaskList :store="store.state.todoOne" />
+  </div>
+</template>
+
+<script>
+  import { onBeforeMount, onMounted, onUpdated } from "@vue/runtime-core";
+  import AddTask from "../components/AddTask.vue";
+  import TaskList from "../components/TaskList.vue";
+  import { useStore } from "vuex";
+
+  export default {
+    components: { AddTask, TaskList },
+    setup() {
+      const store = useStore();
+
+      const fetchData = () => {
+        store.dispatch("fetchTodoOne");
+      };
+
+      onBeforeMount(() => {
+        fetchData();
+      });
+
+      onUpdated(() => {
+        fetchData();
+      });
+
+      return { store };
+    },
+
+```
+
+The above process:
+
+1. Import `useStore`, create a const `store`
+2. Define `fetchData`, invoked with the `onBeforeMount` hook which dispatches to **actions** and invokes `fetchTodoOne`
+3. `store` is returned and (props) `todoOne` is passed down as `store` to the reusable component `TaskList`
+
+4. Continuing on `fetchTodoOne` within the todoOne module is invoked triggering the VueX process below:
+
+```js
+state() {
+    return {
+      todos: [],
+      isLoading: false,
+      error: "",
+    };
+  },
+  mutations: {
+    setTodosData(state, data) {
+      state.todos = data;
+    },
+    setIsLoading(state, boolean) {
+      state.isLoading = boolean;
+    },
+    setError(state, err) {
+      state.error = err;
+    },
+  },
+  actions: {
+    async fetchTodoOne(ctx) {
+      ctx.commit("setIsLoading", true);
+      ctx.commit("setError", "");
+      try {
+        const res = await fetch("end-point-omitted");
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        ctx.commit("setTodosData", data);
+        ctx.commit("setIsLoading", false);
+      } catch (err) {
+        console.log(err.message);
+        ctx.commit("setError", "Unable to fetch todo's list");
+        ctx.commit("setIsLoading", false);
+      }
+    },
+
+```
+
+Above: If the data is successfully returned it is committed to `setTodosData` within **mutations**, which in turn sets the data as the value of `state.todos`.
+
+**Updating the completed property of a task**
+
+The workflow is triggered in the `TaskList` component when the user clicks on the task.
+Here the specific todo item is passed in giving access to it's properties:
+
+```js
+const handleComplete = (todo) => {
+  store.dispatch("toggleCompleteOne", todo);
+};
+```
+
+This dispatch triggers the `toggleCompleteOne` function within actions:
+
+```js
+async toggleCompleteOne(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ complete: !todo.complete }),
+        });
+        await ctx.dispatch("fetchTodoOne");
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+
+```
+
+In the above snippet, once the `PATCH` request has been successfully returned the action `fetchTodoOne` is dispatched, updating the state.todos array, which in turn provides the updated data globally to the application.
