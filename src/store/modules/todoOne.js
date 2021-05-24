@@ -86,6 +86,21 @@ export const todoOne = {
         console.log(err.message);
       }
     },
+    async updateTodoTextOne(ctx, todo, text) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            update: !todo.update,
+            text: todo.text,
+          }),
+        });
+        await ctx.dispatch("fetchTodoOne");
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   getters: {},
 };

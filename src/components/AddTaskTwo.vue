@@ -56,6 +56,7 @@
         background: #ecf0f3;
         border: none;
         border: 2px solid #ecf0f3;
+        font-size: 18px;
       }
       input:focus {
         outline: #aeadf6;

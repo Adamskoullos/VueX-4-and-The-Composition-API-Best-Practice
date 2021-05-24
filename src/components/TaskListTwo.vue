@@ -4,12 +4,17 @@
       <p :class="{ strike: todo.complete }" v-if="!todo.update">
         {{ todo.text }}
       </p>
-      <input
-        type="text"
+      <form
         v-if="todo.update"
-        v-model="todo.text"
-        class="update-todo"
-      />
+        @submit.prevent="handleUpdateText(todo, todo.text)"
+      >
+        <input type="text" v-model="todo.text" class="update-todo" />
+        <button>
+          <span class="material-icons-outlined edit save">
+            save
+          </span>
+        </button>
+      </form>
       <span
         class="material-icons outline"
         v-if="!todo.complete && !todo.update"
@@ -34,9 +39,6 @@
         v-if="!todo.update"
         >delete</span
       >
-      <span class="material-icons-outlined edit save" v-if="todo.update">
-        save
-      </span>
       <span
         class="material-icons-outlined edit back"
         v-if="todo.update"
@@ -71,12 +73,22 @@
         store.dispatch("updateTodoTwo", todo);
       };
 
-      return { handleComplete, st, handleDelete, handleUpdate };
+      const handleUpdateText = (todo, text) => {
+        store.dispatch("updateTodoTextTwo", todo, text);
+      };
+
+      return {
+        handleComplete,
+        st,
+        handleDelete,
+        handleUpdate,
+        handleUpdateText,
+      };
     },
   };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .task-list {
     max-width: 900px;
     margin: auto;
@@ -90,9 +102,9 @@
 
       p {
         flex: 1;
-        margin: 10px 15px 10px 0;
+        margin: 10px 10px 10px 0;
         padding: 10px;
-        // border-bottom: 2px solid #aeadf6;
+        border: 2px solid #ffff;
         border-bottom: 2px solid #e5e8ea;
         font-weight: 400;
         font-size: 18px;
@@ -101,6 +113,29 @@
       }
       p.strike {
         text-decoration: line-through;
+      }
+      form {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: stretch;
+
+        input {
+          margin-right: 5px;
+          border: 2px solid #ecf0f3;
+        }
+
+        button {
+          border: none;
+          background: rgba(255, 255, 255, 0);
+          display: flex;
+          align-items: center;
+          transition: all ease 0.2s;
+
+          span {
+            font-size: 34px !important;
+          }
+        }
       }
       input {
         flex: 1;
@@ -137,27 +172,32 @@
         cursor: pointer;
       }
       span.outline:hover {
-        color: #a8a9aa !important;
+        color: #a8a9aa;
       }
       span.edit {
         font-size: 26px;
-        color: #a8a9aa7a !important;
+        color: #a8a9aa7a;
         cursor: pointer;
       }
       span.edit:hover {
-        color: #a8a9aa !important;
+        color: #a8a9aa;
       }
       span.edit.back {
         font-size: 28px;
-        color: #a8a9aa7a !important;
+        color: #a8a9aa7a;
+      }
+      span.edit.back:hover {
+        color: #a8a9aa !important;
       }
       span.edit.save {
         font-size: 28px;
-        color: #81e597 !important;
+        color: #81e597;
       }
       span.edit.save:hover {
         font-size: 28px;
-        color: #81e597 !important;
+        color: #81e597;
+        transform: scale(1.07);
+        transition: all ease 0.2s;
       }
     }
   }
