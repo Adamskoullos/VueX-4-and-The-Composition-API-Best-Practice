@@ -69,7 +69,7 @@ const fetchData = () => {
 };
 ```
 
-Unfortunately prefixing the action with the module name was creating errors for me, I am assuming this is because I have got something else not quite right elsewhere. I moved on from this by giving the relevant actions different names in each module: `fetchTodoOne` & `fetchTodoTwo`. This is the only change needed as all other naming is within the modules, hence scoped.
+Unfortunately prefixing the action with the module name was creating errors for me, I am assuming this is because I have got something else not quite right elsewhere. I moved on from this by giving the relevant actions different names in each module: `fetchTodoOne` & `fetchTodoTwo`. This is the only change needed as all other naming for this workflow is within the modules, hence scoped.
 
 ## Fetching data on initial load --------------------------------------------
 
@@ -115,9 +115,8 @@ The above process:
 
 1. Import `useStore`, create a const `store`
 2. Define `fetchData`, invoked with the `onBeforeMount` hook which dispatches to **actions** and invokes `fetchTodoOne`
-3. `store` is returned and (props) `todoOne` is passed down as `store` to the reusable component `TaskList`
 
-4. Continuing on `fetchTodoOne` within the todoOne module is invoked triggering the VueX process below:
+3. Continuing on `fetchTodoOne` within the todoOne module is invoked triggering the VueX process below:
 
 ```js
 state() {
@@ -172,7 +171,7 @@ const handleComplete = (todo) => {
 };
 ```
 
-This dispatch triggers the `toggleCompleteOne` function within actions:
+This dispatch triggers the `toggleCompleteOne` function within **actions**:
 
 ```js
 async toggleCompleteOne(ctx, todo) {
@@ -192,4 +191,4 @@ async toggleCompleteOne(ctx, todo) {
 
 In the above snippet, once the `PATCH` request has been successfully returned the action `fetchTodoOne` is dispatched, updating the state.todos array, which in turn provides the updated data globally to the application.
 
-A **Conditional class** was used to provide a strike-through text-decoration on completed tasks.
+A **Conditional class** is used to provide a strike-through text-decoration on completed tasks.

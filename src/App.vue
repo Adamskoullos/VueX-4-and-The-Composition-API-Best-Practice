@@ -17,6 +17,9 @@
 </script>
 
 <style lang="scss">
+  .material-icons-outlined {
+    font-family: "Material Icons" !important;
+  }
   body {
     margin: 0;
     font-family: Roboto;

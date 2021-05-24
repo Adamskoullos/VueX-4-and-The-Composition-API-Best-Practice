@@ -61,6 +61,16 @@ export const todoOne = {
         console.log(err.message);
       }
     },
+    async deleteTodoOne(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "delete",
+        });
+        await ctx.dispatch("fetchTodoOne");
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   getters: {},
 };

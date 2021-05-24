@@ -15,6 +15,9 @@
         >check_box</span
       >
       <span class="material-icons edit">edit</span>
+      <span class="material-icons edit" @click="handleDelete(todo)"
+        >delete</span
+      >
     </div>
   </div>
   <div v-else>
@@ -34,7 +37,11 @@
         store.dispatch("toggleCompleteTwo", todo);
       };
 
-      return { handleComplete, st };
+      const handleDelete = (todo) => {
+        store.dispatch("deleteTodoTwo", todo);
+      };
+
+      return { handleComplete, st, handleDelete };
     },
   };
 </script>
@@ -77,10 +84,16 @@
         color: #e5e8ea;
         cursor: pointer;
       }
+      span.outline:hover {
+        color: #a8a9aa !important;
+      }
       span.edit {
         font-size: 26px;
-        color: #8288a1;
+        color: #a8a9aa7a !important;
         cursor: pointer;
+      }
+      span.edit:hover {
+        color: #a8a9aa !important;
       }
     }
   }
