@@ -1,7 +1,7 @@
 <template>
   <div class="task-list" v-if="st.todos">
     <div class="task" v-for="todo in st.todos" :key="todo.id">
-      <p>{{ todo.text }}</p>
+      <p :class="{ strike: todo.complete }">{{ todo.text }}</p>
       <span
         class="material-icons outline"
         v-if="!todo.complete"
@@ -62,6 +62,9 @@
         font-size: 18px;
         line-height: 30px;
         color: #505050;
+      }
+      p.strike {
+        text-decoration: line-through;
       }
 
       span {

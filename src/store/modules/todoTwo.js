@@ -37,6 +37,18 @@ export const todoTwo = {
         ctx.commit("setIsLoading", false);
       }
     },
+    async toggleCompleteTwo(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-two.herokuapp.com/todos/" + todo.id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ complete: !todo.complete }),
+        });
+        await ctx.dispatch("fetchTodoTwo");
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   getters: {},
 };

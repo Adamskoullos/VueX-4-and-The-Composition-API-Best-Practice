@@ -1,7 +1,7 @@
 <template>
-  <div class="task-list" v-if="store.todos">
-    <div class="task" v-for="todo in store.todos" :key="todo.id">
-      <p>{{ todo.text }}</p>
+  <div class="task-list" v-if="st.todos">
+    <div class="task" v-for="todo in st.todos" :key="todo.id">
+      <p :class="{ strike: todo.complete }">{{ todo.text }}</p>
       <span
         class="material-icons outline"
         v-if="!todo.complete"
@@ -26,16 +26,16 @@
   import { useStore } from "vuex";
 
   export default {
-    props: ["store"],
+    // props: ["store"],
     setup() {
       const store = useStore();
+      const st = store.state.todoOne;
+
       const handleComplete = (todo) => {
-        // store.dispatch("toggleCompleteOne", todo.id);
-        console.log(store.state.todoTwo.todos[0].text);
-        console.log(todo.text);
+        store.dispatch("toggleCompleteTwo", todo);
       };
 
-      return { handleComplete };
+      return { handleComplete, st };
     },
   };
 </script>
@@ -62,6 +62,9 @@
         font-size: 18px;
         line-height: 30px;
         color: #505050;
+      }
+      p.strike {
+        text-decoration: line-through;
       }
 
       span {
