@@ -22,6 +22,7 @@
           id: Math.floor(Math.random() * 100000000 + 1),
           text: task.value,
           complete: false,
+          update: false,
         };
         store.dispatch("addTodoOne", newTodo);
         task.value = "";
@@ -73,6 +74,11 @@
         cursor: pointer;
         padding: 5px 10px;
         box-shadow: 0px 0px 20px 4px rgba(129, 229, 151, 0.3);
+        transition: all ease 0.2s;
+      }
+      button:hover {
+        transform: scale(1.05);
+        transition: all ease 0.2s;
       }
     }
   }

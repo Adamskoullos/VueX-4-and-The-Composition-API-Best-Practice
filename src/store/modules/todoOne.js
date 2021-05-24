@@ -18,6 +18,9 @@ export const todoOne = {
     setError(state, err) {
       state.error = err;
     },
+    setUpdateTodo(state, boolean) {
+      state.updateTodo = boolean;
+    },
   },
   actions: {
     async fetchTodoOne(ctx) {
@@ -65,6 +68,18 @@ export const todoOne = {
       try {
         await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
           method: "delete",
+        });
+        await ctx.dispatch("fetchTodoOne");
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+    async updateTodoOne(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ update: !todo.update }),
         });
         await ctx.dispatch("fetchTodoOne");
       } catch (err) {
