@@ -1,5 +1,5 @@
 <template>
-  <div class="task-list" v-if="st.todos">
+  <div class="task-list" v-if="!st.isLoading">
     <div class="task" v-for="todo in st.todos" :key="todo.id">
       <p :class="{ strike: todo.complete }" v-if="!todo.update">
         {{ todo.text }}
@@ -48,15 +48,20 @@
       </span>
     </div>
   </div>
-  <div v-else>
-    <h1>Loading...</h1>
+  <div v-if="st.isLoading">
+    <Loader />
+  </div>
+  <div v-if="st.error">
+    <h3 class="error">Sorry, unable to fetch todo list at this time</h3>
   </div>
 </template>
 
 <script>
   import { useStore } from "vuex";
+  import Loader from "../components/Loader";
 
   export default {
+    components: { Loader },
     setup() {
       const store = useStore();
       const st = store.state.todoOne;
