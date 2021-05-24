@@ -1,5 +1,5 @@
 <template>
-  <div class="task-list" v-if="!st.isLoading">
+  <div class="task-list" v-if="!st.isLoading && !st.error">
     <div class="task" v-for="todo in st.todos" :key="todo.id">
       <p :class="{ strike: todo.complete }" v-if="!todo.update">
         {{ todo.text }}
@@ -51,8 +51,8 @@
   <div v-if="st.isLoading">
     <Loader />
   </div>
-  <div v-if="st.error">
-    <h3 class="error">Sorry, unable to fetch todo list at this time</h3>
+  <div v-if="st.error" class="error">
+    <h1>Sorry, unable to fetch todo list at this time</h1>
   </div>
 </template>
 
@@ -94,6 +94,17 @@
 </script>
 
 <style lang="scss" scoped>
+  div.error {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h1 {
+      margin: auto;
+      font-size: 30px;
+      font-weight: 400;
+    }
+  }
   .task-list {
     max-width: 900px;
     margin: auto;
