@@ -15,7 +15,7 @@ A Todo application mapping VueX processes for each CRUD workflow. The project to
 5. Built to match design specification
 6. Code comments used to clearly explain what the code is doing
 
-## Planning
+# Planning
 
 1. Identify and model the core VueX workflows
 2. Identify/set up two end points to be used for the Todo's
@@ -33,13 +33,13 @@ A Todo application mapping VueX processes for each CRUD workflow. The project to
    - Add new task workflow plus styling
    - Remove task workflow
 
-8. Loaders, Transitions & Hovers
+8. Loaders, Transitions, Hovers & 404 page
 
 9. Testing
 
 10. Deployment
 
-## Research Stage
+# Research Stage
 
 1. VueX
 
@@ -57,7 +57,7 @@ I did this and the process to build the two mock api's used for this project can
 
 - https://github.com/Adamskoullos/mock-api-two
 
-## Development Stage
+# Development Stage
 
 This sections covers noteworthy parts of the build process.
 
@@ -71,7 +71,7 @@ const fetchData = () => {
 
 Unfortunately prefixing the action with the module name was creating errors for me, I am assuming this is because I have got something else not quite right elsewhere. I moved on from this by giving the relevant actions different names in each module: `fetchTodoOne` & `fetchTodoTwo`. This is the only change needed as all other naming is within the modules, hence scoped.
 
-**Fetching data on initial load**
+## Fetching data on initial load --------------------------------------------
 
 Each todo view/page has the following pattern which is triggered by the Vue lifecycle hook `onBeforeMount`:
 
@@ -161,7 +161,7 @@ state() {
 
 Above: If the data is successfully returned it is committed to `setTodosData` within **mutations**, which in turn sets the data as the value of `state.todos`.
 
-**Updating the completed property of a task**
+## Updating Task to complete ----------------------------------------------------------
 
 The workflow is triggered in the `TaskList` component when the user clicks on the task.
 Here the specific todo item is passed in giving access to it's properties:
@@ -191,3 +191,5 @@ async toggleCompleteOne(ctx, todo) {
 ```
 
 In the above snippet, once the `PATCH` request has been successfully returned the action `fetchTodoOne` is dispatched, updating the state.todos array, which in turn provides the updated data globally to the application.
+
+A **Conditional class** was used to provide a strike-through text-decoration on completed tasks.

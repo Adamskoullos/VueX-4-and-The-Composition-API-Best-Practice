@@ -26,7 +26,6 @@
   import { useStore } from "vuex";
 
   export default {
-    // props: ["store"],
     setup() {
       const store = useStore();
       const st = store.state.todoOne;

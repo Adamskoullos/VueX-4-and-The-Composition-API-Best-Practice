@@ -49,6 +49,18 @@ export const todoTwo = {
         console.log(err.message);
       }
     },
+    async addTodoTwo(ctx, newTodo) {
+      try {
+        await fetch("https://dev-test-api-two.herokuapp.com/todos", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(newTodo),
+        });
+        await ctx.dispatch("fetchTodoTwo");
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
   },
   getters: {},
 };

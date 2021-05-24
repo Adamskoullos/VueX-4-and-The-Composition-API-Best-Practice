@@ -2,18 +2,32 @@
   <form class="container-add-task" @submit.prevent="handleSubmit">
     <h3>Create a new task</h3>
     <div class="input-div">
-      <input type="text" />
+      <input type="text" v-model="task" />
       <button>Add</button>
     </div>
   </form>
 </template>
 
 <script>
+  import { ref } from "@vue/reactivity";
+  import { useStore } from "vuex";
+
   export default {
     setup() {
-      const handleSubmit = async () => {};
+      const store = useStore();
+      const task = ref("");
 
-      return { handleSubmit };
+      const handleSubmit = () => {
+        const newTodo = {
+          id: Math.floor(Math.random() * 100000000 + 1),
+          text: task.value,
+          complete: false,
+        };
+        store.dispatch("addTodoTwo", newTodo);
+        task.value = "";
+      };
+
+      return { handleSubmit, task };
     },
   };
 </script>
