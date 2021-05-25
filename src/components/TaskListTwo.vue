@@ -201,6 +201,8 @@
       span.edit.back {
         font-size: 28px;
         color: #a8a9aa7a;
+        margin-right: 35px;
+        margin-left: 0;
       }
       span.edit.back:hover {
         color: #a8a9aa !important;

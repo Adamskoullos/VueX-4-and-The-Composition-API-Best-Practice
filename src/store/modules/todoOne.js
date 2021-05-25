@@ -86,7 +86,7 @@ export const todoOne = {
         console.log(err.message);
       }
     },
-    async updateTodoTextOne(ctx, todo, text) {
+    async updateTodoTextOne(ctx, todo) {
       try {
         await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
           method: "PATCH",
@@ -94,6 +94,7 @@ export const todoOne = {
           body: JSON.stringify({
             update: !todo.update,
             text: todo.text,
+            complete: false,
           }),
         });
         await ctx.dispatch("fetchTodoOne");

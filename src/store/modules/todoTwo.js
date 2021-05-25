@@ -91,6 +91,7 @@ export const todoTwo = {
           body: JSON.stringify({
             update: !todo.update,
             text: todo.text,
+            complete: false,
           }),
         });
         await ctx.dispatch("fetchTodoTwo");

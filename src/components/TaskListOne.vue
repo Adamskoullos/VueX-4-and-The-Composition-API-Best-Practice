@@ -48,7 +48,7 @@
       </span>
     </div>
   </div>
-  <div v-if="st.isLoading">
+  <div v-if="st.isLoading && !st.error && !st.todos">
     <Loader />
   </div>
   <div v-if="st.error" class="error">
@@ -78,8 +78,8 @@
         store.dispatch("updateTodoOne", todo);
       };
 
-      const handleUpdateText = (todo, text) => {
-        store.dispatch("updateTodoTextOne", todo, text);
+      const handleUpdateText = (todo) => {
+        store.dispatch("updateTodoTextOne", todo);
       };
 
       return {
@@ -201,6 +201,8 @@
       span.edit.back {
         font-size: 28px;
         color: #a8a9aa7a;
+        margin-right: 35px;
+        margin-left: 0;
       }
       span.edit.back:hover {
         color: #a8a9aa !important;
