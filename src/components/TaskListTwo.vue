@@ -55,7 +55,7 @@
     </div>
   </div>
   <!-- The below loader only shows on initial load while Heroku is spinning up after that while state.todos has a value it will not show -->
-  <div v-if="st.isLoading && !st.error && !st.todos[0]">
+  <div v-if="st.isLoading && !st.error">
     <Loader />
   </div>
   <!-- If there is an issue fetching data this message will show to let the user know -->
