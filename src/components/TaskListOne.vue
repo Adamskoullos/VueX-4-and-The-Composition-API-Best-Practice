@@ -1,9 +1,11 @@
 <template>
+  <!-- Show the main content div if state has data and there is no error -->
   <div class="task-list" v-if="!st.isLoading && !st.error">
     <div class="task" v-for="todo in st.todos" :key="todo.id">
       <p :class="{ strike: todo.complete }" v-if="!todo.update">
         {{ todo.text }}
       </p>
+      <!-- The below form shows if the user has clicked to edit a task to update the text -->
       <form
         v-if="todo.update"
         @submit.prevent="handleUpdateText(todo, todo.text)"
@@ -52,9 +54,11 @@
       </div>
     </div>
   </div>
+  <!-- The below loader only shows on initial load while Heroku is spinning up after that while state.todos has a value it will not show -->
   <div v-if="st.isLoading && !st.error && !st.todos[0]">
     <Loader />
   </div>
+  <!-- If there is an issue fetching data this message will show to let the user know -->
   <div v-if="st.error" class="error">
     <h1>Sorry, unable to fetch todo list at this time</h1>
   </div>

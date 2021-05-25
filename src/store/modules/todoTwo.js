@@ -20,6 +20,7 @@ export const todoTwo = {
     },
   },
   actions: {
+    // This first action is the core of all workflows and updates the store.state every time there has been a change
     async fetchTodoTwo(ctx) {
       ctx.commit("setIsLoading", true);
       ctx.commit("setError", "");

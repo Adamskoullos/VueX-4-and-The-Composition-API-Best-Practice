@@ -16,7 +16,7 @@
     setup() {
       const store = useStore();
       const task = ref("");
-
+      // The below object: 'complete' is used to toggle check box and strike-through, 'update' is used to toggle input/<p> tag so the user can update task text
       const handleSubmit = () => {
         const newTodo = {
           id: Math.floor(Math.random() * 100000000 + 1),

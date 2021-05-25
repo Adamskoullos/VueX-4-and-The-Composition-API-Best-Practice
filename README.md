@@ -1,3 +1,9 @@
+<div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/119489513-ad28ce80-bd53-11eb-9894-9d411d6d6ead.png" style="margin: 30px auto"></div>
+
+<br><br>
+
+<div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/119489574-bc0f8100-bd53-11eb-8c75-21e9c3d17574.png" style="margin: 30px auto"></div>
+
 # VueX Best Practices
 
 A Todo application mapping VueX processes for each CRUD workflow. The project to be structured as if a large project, leveraging VueX modules.
@@ -320,3 +326,5 @@ async updateTodoTextOne(ctx, todo) {
 ```
 
 ## Getters - working with computed properties to filter todo lists
+
+This section is a work in progress
