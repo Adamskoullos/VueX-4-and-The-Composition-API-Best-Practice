@@ -83,4 +83,23 @@
       }
     }
   }
+  @media (min-width: 200px) and (max-width: 499px) {
+    form.container-add-task {
+      margin: 10px;
+
+      h3 {
+        text-align: center;
+      }
+
+      .input-div {
+        flex: 1;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        input {
+          margin: 10px 0;
+        }
+      }
+    }
+  }
 </style>

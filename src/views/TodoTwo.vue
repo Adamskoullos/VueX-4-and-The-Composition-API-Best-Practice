@@ -35,7 +35,11 @@
 
 <style lang="scss">
   .container-todo {
-    // background: orangered;
     margin: 40px 50px;
+  }
+  @media (min-width: 200px) and (max-width: 499px) {
+    .container-todo {
+      margin: 40px 0;
+    }
   }
 </style>

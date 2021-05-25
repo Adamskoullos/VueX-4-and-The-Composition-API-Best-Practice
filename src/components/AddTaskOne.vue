@@ -49,7 +49,7 @@
       justify-content: stretch;
 
       input {
-        flex: 1;
+        flex: 1 1;
         padding: 20px 10px;
         margin: 10px;
         border-radius: 6px;
@@ -80,6 +80,25 @@
       button:hover {
         transform: scale(1.05);
         transition: all ease 0.2s;
+      }
+    }
+  }
+  @media (min-width: 200px) and (max-width: 499px) {
+    form.container-add-task {
+      margin: 10px;
+
+      h3 {
+        text-align: center;
+      }
+
+      .input-div {
+        flex: 1;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        input {
+          margin: 10px 0;
+        }
       }
     }
   }

@@ -9,46 +9,50 @@
         @submit.prevent="handleUpdateText(todo, todo.text)"
       >
         <input type="text" v-model="todo.text" class="update-todo" />
-        <button>
-          <span class="material-icons-outlined edit save">
-            save
+        <div class="edit-buttons">
+          <button>
+            <span class="material-icons-outlined edit save">
+              save
+            </span>
+          </button>
+          <span
+            class="material-icons-outlined edit back"
+            v-if="todo.update"
+            @click="handleUpdate(todo)"
+          >
+            backspace
           </span>
-        </button>
+        </div>
       </form>
-      <span
-        class="material-icons outline"
-        v-if="!todo.complete && !todo.update"
-        @click="handleComplete(todo)"
-        >check_box_outline_blank</span
-      >
-      <span
-        class="material-icons"
-        v-if="todo.complete && !todo.update"
-        @click="handleComplete(todo)"
-        >check_box</span
-      >
-      <span
-        class="material-icons edit"
-        @click="handleUpdate(todo)"
-        v-if="!todo.update"
-        >edit</span
-      >
-      <span
-        class="material-icons edit"
-        @click="handleDelete(todo)"
-        v-if="!todo.update"
-        >delete</span
-      >
-      <span
-        class="material-icons-outlined edit back"
-        v-if="todo.update"
-        @click="handleUpdate(todo)"
-      >
-        backspace
-      </span>
+      <div class="todo-actions">
+        <span
+          class="material-icons outline"
+          v-if="!todo.complete && !todo.update"
+          @click="handleComplete(todo)"
+          >check_box_outline_blank</span
+        >
+        <span
+          class="material-icons"
+          v-if="todo.complete && !todo.update"
+          @click="handleComplete(todo)"
+          >check_box</span
+        >
+        <span
+          class="material-icons edit"
+          @click="handleUpdate(todo)"
+          v-if="!todo.update"
+          >edit</span
+        >
+        <span
+          class="material-icons edit"
+          @click="handleDelete(todo)"
+          v-if="!todo.update"
+          >delete</span
+        >
+      </div>
     </div>
   </div>
-  <div v-if="st.isLoading && !st.error && !st.todos">
+  <div v-if="st.isLoading && !st.error && !st.todos[0]">
     <Loader />
   </div>
   <div v-if="st.error" class="error">
@@ -137,8 +141,12 @@
         justify-content: stretch;
 
         input {
+          flex: 1 1;
           margin-right: 5px;
           border: 2px solid #ecf0f3;
+        }
+        .edit-buttons {
+          display: flex;
         }
 
         button {
@@ -168,6 +176,10 @@
       input:focus {
         outline: #aeadf6;
         border: 2px solid #aeadf6;
+      }
+      .todo-actions {
+        display: flex;
+        align-items: center;
       }
 
       span {
@@ -217,6 +229,38 @@
         transform: scale(1.07);
         transition: all ease 0.2s;
       }
+    }
+  }
+  @media (min-width: 200px) and (max-width: 499px) {
+    .task-list .task {
+      flex-wrap: wrap;
+      p {
+        flex: 1 1;
+        min-width: 250px;
+      }
+    }
+    form {
+      flex-wrap: wrap;
+      input {
+        flex: 1;
+        min-width: 250px;
+      }
+      .edit-buttons {
+        margin: auto;
+
+        .back {
+          margin-right: 0;
+        }
+      }
+      span.edit.back {
+        margin-right: 0 !important;
+      }
+      button {
+        margin: auto;
+      }
+    }
+    .todo-actions {
+      margin: auto;
     }
   }
 </style>

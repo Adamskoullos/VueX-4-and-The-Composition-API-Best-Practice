@@ -18,6 +18,7 @@
     align-items: center;
     justify-content: flex-end;
     height: 100px;
+    flex-wrap: wrap;
 
     h2 {
       margin: auto auto auto 60px;
@@ -38,6 +39,22 @@
       }
       a.router-link-active {
         border-bottom: 3px solid #aeadf6;
+      }
+    }
+  }
+  @media (min-width: 200px) and (max-width: 499px) {
+    .nav-wrapper h2 {
+      margin: 30px auto 30px auto;
+      width: 300px;
+      text-align: center;
+    }
+
+    .nav-wrapper #nav {
+      justify-content: center;
+      margin: auto;
+
+      a {
+        margin: 0 10px 20px 10px;
       }
     }
   }
