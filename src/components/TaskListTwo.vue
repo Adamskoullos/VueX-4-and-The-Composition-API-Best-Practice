@@ -72,7 +72,7 @@
     components: { Loader },
     setup() {
       const store = useStore();
-      const st = store.state.todoOne;
+      const st = store.state.todoTwo;
 
       const handleComplete = (todo) => {
         store.dispatch("toggleCompleteTwo", todo);
