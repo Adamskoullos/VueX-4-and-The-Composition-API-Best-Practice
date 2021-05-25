@@ -8,6 +8,10 @@
 
 <div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/119497254-4360f280-bd5c-11eb-8fe9-cca2f62bafc2.png" style="margin: 30px auto"></div>
 
+# [Live Link](https://vues-crud-workflows.netlify.app/)
+
+Live app uses Heroku and is deployed to Netlify
+
 # VueX Best Practices
 
 A Todo application mapping VueX processes for each CRUD workflow. The project to be structured as if a large project, leveraging VueX modules.
