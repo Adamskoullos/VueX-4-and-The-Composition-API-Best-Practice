@@ -17,7 +17,7 @@
       const store = useStore();
 
       const fetchData = () => {
-        store.dispatch("fetchTodoTwo");
+        store.dispatch("todoTwo/fetchTodo");
       };
 
       onBeforeMount(() => {

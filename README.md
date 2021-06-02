@@ -88,7 +88,7 @@ const fetchData = () => {
 };
 ```
 
-Unfortunately prefixing the action with the module name was creating errors for me, I am assuming this is because I have got something else not quite right elsewhere. I moved on from this by giving the relevant actions different names in each module: `fetchTodoOne` & `fetchTodoTwo`. This is the only change needed as all other naming for this workflow is within the modules, hence scoped.
+**Fixed**: Each module requires `namespaced: true`, I had set it as `namespace: true`...thats the good news, bad news, I have a lot of fixing to do.
 
 ## Fetching data on initial load
 

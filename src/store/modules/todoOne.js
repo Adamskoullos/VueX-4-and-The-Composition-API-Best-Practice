@@ -1,5 +1,5 @@
 export const todoOne = {
-  namespace: true,
+  namespaced: true,
 
   state() {
     return {
@@ -24,7 +24,7 @@ export const todoOne = {
   },
   actions: {
     // This first action is the core of all workflows and updates the store.state every time there has been a change
-    async fetchTodoOne(ctx) {
+    async fetchTodo(ctx) {
       ctx.commit("setIsLoading", true);
       ctx.commit("setError", "");
       try {
@@ -41,53 +41,53 @@ export const todoOne = {
         ctx.commit("setIsLoading", false);
       }
     },
-    async toggleCompleteOne(ctx, todo) {
+    async toggleComplete(ctx, todo) {
       try {
         await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
           method: "PATCH",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ complete: !todo.complete }),
         });
-        await ctx.dispatch("fetchTodoOne");
+        await ctx.dispatch("fetchTodo");
       } catch (err) {
         console.log(err.message);
       }
     },
-    async addTodoOne(ctx, newTodo) {
+    async addTodo(ctx, newTodo) {
       try {
         await fetch("https://dev-test-api-one.herokuapp.com/todos", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify(newTodo),
         });
-        await ctx.dispatch("fetchTodoOne");
+        await ctx.dispatch("fetchTodo");
       } catch (err) {
         console.log(err.message);
       }
     },
-    async deleteTodoOne(ctx, todo) {
+    async deleteTodo(ctx, todo) {
       try {
         await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
           method: "delete",
         });
-        await ctx.dispatch("fetchTodoOne");
+        await ctx.dispatch("fetchTodo");
       } catch (err) {
         console.log(err.message);
       }
     },
-    async updateTodoOne(ctx, todo) {
+    async updateTodo(ctx, todo) {
       try {
         await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
           method: "PATCH",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ update: !todo.update }),
         });
-        await ctx.dispatch("fetchTodoOne");
+        await ctx.dispatch("fetchTodo");
       } catch (err) {
         console.log(err.message);
       }
     },
-    async updateTodoTextOne(ctx, todo) {
+    async updateTodoText(ctx, todo) {
       try {
         await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
           method: "PATCH",
@@ -98,7 +98,7 @@ export const todoOne = {
             complete: false,
           }),
         });
-        await ctx.dispatch("fetchTodoOne");
+        await ctx.dispatch("fetchTodo");
       } catch (err) {
         console.log(err.message);
       }

@@ -24,7 +24,7 @@
           complete: false,
           update: false,
         };
-        store.dispatch("addTodoTwo", newTodo);
+        store.dispatch("todoTwo/addTodo", newTodo);
         task.value = "";
       };
 

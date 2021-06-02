@@ -75,19 +75,19 @@
       const st = store.state.todoTwo;
 
       const handleComplete = (todo) => {
-        store.dispatch("toggleCompleteTwo", todo);
+        store.dispatch("todoTwo/toggleComplete", todo);
       };
 
       const handleDelete = (todo) => {
-        store.dispatch("deleteTodoTwo", todo);
+        store.dispatch("todoTwo/deleteTodo", todo);
       };
 
       const handleUpdate = (todo) => {
-        store.dispatch("updateTodoTwo", todo);
+        store.dispatch("todoTwo/updateTodo", todo);
       };
 
       const handleUpdateText = (todo, text) => {
-        store.dispatch("updateTodoTextTwo", todo, text);
+        store.dispatch("todoTwo/updateTodoText", todo, text);
       };
 
       return {
