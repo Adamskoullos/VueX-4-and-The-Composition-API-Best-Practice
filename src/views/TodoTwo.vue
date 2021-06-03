@@ -1,20 +1,21 @@
 <template>
   <div class="container-todo">
-    <AddTaskTwo />
+    <AddTask :todo="moduleTwo" />
     <TaskListTwo />
   </div>
 </template>
 
 <script>
-  import { onBeforeMount, onUpdated } from "@vue/runtime-core";
-  import AddTaskTwo from "../components/AddTaskTwo.vue";
+  import { onBeforeMount, onUpdated, ref } from "@vue/runtime-core";
+  import AddTask from "../components/AddTask.vue";
   import TaskListTwo from "../components/TaskListTwo.vue";
   import { useStore } from "vuex";
 
   export default {
-    components: { AddTaskTwo, TaskListTwo },
+    components: { AddTask, TaskListTwo },
     setup() {
       const store = useStore();
+      const moduleTwo = ref("todoTwo");
 
       const fetchData = () => {
         store.dispatch("todoTwo/fetchTodo");
@@ -28,7 +29,7 @@
         fetchData();
       });
 
-      return { store };
+      return { store, moduleTwo };
     },
   };
 </script>

@@ -13,7 +13,8 @@
   import { useStore } from "vuex";
 
   export default {
-    setup() {
+    props: ["todo"],
+    setup(props) {
       const store = useStore();
       const task = ref("");
       // The below object: 'complete' is used to toggle check box and strike-through, 'update' is used to toggle input/<p> tag so the user can update task text
@@ -24,7 +25,7 @@
           complete: false,
           update: false,
         };
-        store.dispatch("todoOne/addTodo", newTodo);
+        store.dispatch(props.todo + "/addTodo", newTodo);
         task.value = "";
       };
 
