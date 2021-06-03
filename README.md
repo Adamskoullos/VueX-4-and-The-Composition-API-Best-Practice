@@ -18,7 +18,7 @@ A Todo application mapping VueX processes for each CRUD workflow. The project to
 
 ### Main focus:
 
-1. Modelling the set up structure for VueX 4 + Compistion API to use separate module files
+1. Modelling the set up structure for VueX 4 + Composition API to use separate module files
 2. Each nested component to be reusable
 3. Only updating the Store with the minimum required data for each workflow, working with local state where suitable to make the user experience as fluid as possible
 
@@ -84,7 +84,7 @@ I did this and the process to build the two mock api's used for this project can
 
 ## VueX Modules & Reusable Components
 
-There are a couple of key areas to note that allow effective module namespacing within reusable nested components:
+There are a couple of key areas to note that allow effective module name spacing within reusable nested components:
 
 1. Accessing state properties within each module:
 
@@ -181,7 +181,55 @@ The above is how the reusable nested component `TaskList` can render todo lists 
 
 ## Fetching data on initial load
 
-**Note**: Application currently being refactored with refined workflows
+The below code snippet is within the script of the `TodoOne` view. Before the component mounts the DOM `fetchData()` is invoked which dispatches the `fetchTodo` function within **actions**, within the `todoOne` module:
+
+```js
+const fetchData = () => {
+  store.dispatch("todoOne/fetchTodo");
+};
+
+onBeforeMount(() => {
+  fetchData();
+});
+```
+
+The below snippet is the `fetchTodo` within **actions**:
+
+```js
+async fetchTodo(ctx) {
+      ctx.commit("setIsLoading", true);
+      ctx.commit("setError", "");
+      try {
+        const res = await fetch("https://dev-test-api-one.herokuapp.com/todos");
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        ctx.commit("setTodosData", data);
+        ctx.commit("setIsLoading", false);
+      } catch (err) {
+        console.log(err.message);
+        ctx.commit("setError", "Unable to fetch todo's list");
+        ctx.commit("setIsLoading", false);
+      }
+    },
+```
+
+Above: If the JSON data is successfully fetched, it is turned to a JS object and committed to mutations. Note the data is passed in as the second argument:
+
+```js
+ctx.commit("setTodosData", data);
+```
+
+Below: Mutations sets the data within the store.state properties, in this case the `todos` array:
+
+```js
+mutations: {
+    setTodosData(state, data) {
+      state.todos = data;
+    },
+
+```
 
 ## Updating Task to complete
 
