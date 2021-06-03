@@ -38,6 +38,27 @@ export const todoTwo = {
         ctx.commit("setIsLoading", false);
       }
     },
+    async fetchSingleTodo(ctx, todo) {
+      try {
+        const res = await fetch(
+          "https://dev-test-api-two.herokuapp.com/todos/" + todo.id
+        );
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        const newArr = ctx.state.todos.map((todo) => {
+          if (todo.id == data.id) {
+            return data;
+          }
+          return todo;
+        });
+        ctx.commit("setTodosData", newArr);
+      } catch (err) {
+        console.log(err.message);
+        ctx.commit("setError", "Unable to access the data base at this time");
+      }
+    },
     async toggleComplete(ctx, todo) {
       try {
         await fetch("https://dev-test-api-two.herokuapp.com/todos/" + todo.id, {
@@ -45,7 +66,7 @@ export const todoTwo = {
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ complete: !todo.complete }),
         });
-        await ctx.dispatch("fetchTodo");
+        await ctx.dispatch("fetchSingleTodo", todo);
       } catch (err) {
         console.log(err.message);
       }
