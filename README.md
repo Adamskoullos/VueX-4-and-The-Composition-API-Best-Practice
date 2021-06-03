@@ -82,19 +82,102 @@ I did this and the process to build the two mock api's used for this project can
 
 # Development Stage
 
-**Note**: Moving forward all code is working with Vue3 composition api + VueX 4.
+## VueX Modules & Reusable Components
 
-This sections covers noteworthy parts of the build process.
+There are a couple of key areas to note that allow effective module namespacing within reusable nested components:
 
-**Issue**: When using modules and namespace scoping there is a best practice to target the properties of a specific module:
+1. Accessing state properties within each module:
+
+- A `ref` const is created in each View component to be the 'Key' for the relevant module: `const moduleOne = ref('todoOne')`
+- This is passed down as a prop to both `AddTask` & `TaskList` components
 
 ```js
-const fetchData = () => {
-  store.dispatch("moduleName/actionFunction");
-};
+
+// TodoOne View
+<template>
+<div class="container-todo">
+  <AddTask :todo="moduleOne" />
+  <TaskList :todo="moduleOne" :st="st" />
+</div>
+</template>
+
+<script>
 ```
 
-**Fixed**: Each module requires `namespaced: true`, I had set it as `namespace: true`. Now I can refactor and make nested components reusable.
+```js
+import { onBeforeMount, onUpdated, ref } from "@vue/runtime-core";
+import AddTask from "../components/AddTask.vue";
+import TaskList from "../components/TaskList.vue";
+import { useStore } from "vuex";
+
+export default {
+  components: { AddTask, TaskList },
+  setup() {
+    const store = useStore();
+    const st = ref(store.state.todoOne);
+    const moduleOne = ref("todoOne");
+
+    const fetchData = () => {
+      store.dispatch("todoOne/fetchTodo");
+    };
+
+```
+
+- The prop is accepted within the nested components and `props` is passed into the `setup()` function
+- The `props.todo` is used as a prefix to the dispatched action function. This results in the module name string being added to the action string `todoOne/toggleComplete`:
+
+```js
+// TaskList component
+export default {
+    props: ["todo", "st"],
+    components: { Loader },
+    setup(props) {
+      const store = useStore();
+
+      const handleComplete = (todo) => {
+        store.dispatch(props.todo + "/toggleComplete", todo);
+      };
+
+```
+
+The above is what allows the reusable components to point to their respective modules when dispatching to actions.
+
+2. Rendering module specific state properties within the DOM via reusable components:
+
+The pattern to access state properties is: `store.state.moduleName.property`, each View component has a const `st`:
+
+```js
+const store = useStore();
+
+// Module One
+const st = ref(store.state.todoOne);
+
+// Module Two
+const st = ref(store.state.todoTwo);
+```
+
+`st` is passed down from the View to the nested `TaskList` component and from there can be used as: `st.propertyName`. This is the same as `store.state.moduleName.property`:
+
+```html
+<div class="container-todo">
+  <AddTask :todo="moduleOne" />
+  <TaskList :todo="moduleOne" :st="st" />
+</div>
+```
+
+The below example comes from the template of the `TaskList` component. Note how `st.todos` is used instead of `store.state.todoOne.todos`
+
+```html
+<div class="task-list" v-if="!st.isLoading && !st.error">
+  <div class="task" v-for="todo in st.todos" :key="todo.id">
+    <p :class="{ strike: todo.complete }" v-if="!todo.update">
+      {{ todo.text }}
+    </p>
+  </div>
+</div>
+```
+
+The above is how the reusable nested component `TaskList` can render todo lists from different modules, depending on the parent component and what the value of `st` is when it is passed down.
 
 ## Fetching data on initial load
 

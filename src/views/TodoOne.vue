@@ -15,7 +15,7 @@
     components: { AddTask, TaskList },
     setup() {
       const store = useStore();
-      const st = store.state.todoOne;
+      const st = ref(store.state.todoOne);
       const moduleOne = ref("todoOne");
 
       const fetchData = () => {
