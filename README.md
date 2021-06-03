@@ -12,9 +12,15 @@
 
 Live app uses Heroku and is deployed to Netlify
 
-# VueX Best Practices
+# VueX 4 + Composition API Best Practices
 
 A Todo application mapping VueX processes for each CRUD workflow. The project to be structured as if a large project, leveraging VueX modules.
+
+### Main focus:
+
+1. Modelling the set up structure for VueX 4 + Compistion API to use separate module files
+2. Each nested component to be reusable
+3. Only updating the Store with the minimum required data for each workflow, working with local state where suitable to make the user experience as fluid as possible
 
 ## Criteria
 
@@ -88,250 +94,25 @@ const fetchData = () => {
 };
 ```
 
-**Fixed**: Each module requires `namespaced: true`, I had set it as `namespace: true`...thats the good news, bad news, I have a lot of fixing to do.
+**Fixed**: Each module requires `namespaced: true`, I had set it as `namespace: true`. Now I can refactor and make nested components reusable.
 
 ## Fetching data on initial load
 
-Each todo view/page has the following pattern which is triggered by the Vue lifecycle hook `onBeforeMount`:
-
-```js
-<template>
-  <div class="container-todo">
-    <AddTaskOne />
-    <TaskListOne />
-  </div>
-</template>
-
-<script>
-  import { onBeforeMount, onUpdated } from "@vue/runtime-core";
-  import AddTaskOne from "../components/AddTaskOne.vue";
-  import TaskListOne from "../components/TaskListOne.vue";
-  import { useStore } from "vuex";
-
-  export default {
-    components: { AddTaskOne, TaskListOne },
-    setup() {
-      const store = useStore();
-
-      const fetchData = () => {
-        store.dispatch("fetchTodoOne");
-      };
-
-      onBeforeMount(() => {
-        fetchData();
-      });
-
-      onUpdated(() => {
-        fetchData();
-      });
-
-      return { store };
-    },
-
-```
-
-The above process:
-
-1. Import `useStore`, create a const `store`
-2. Define `fetchData`, invoked with the `onBeforeMount` hook which dispatches to **actions** and invokes `fetchTodoOne`
-
-3. Continuing on `fetchTodoOne` within the todoOne module is invoked triggering the VueX process below:
-
-```js
-state() {
-    return {
-      todos: [],
-      isLoading: false,
-      error: "",
-    };
-  },
-  mutations: {
-    setTodosData(state, data) {
-      state.todos = data;
-    },
-    setIsLoading(state, boolean) {
-      state.isLoading = boolean;
-    },
-    setError(state, err) {
-      state.error = err;
-    },
-  },
-  actions: {
-    async fetchTodoOne(ctx) {
-      ctx.commit("setIsLoading", true);
-      ctx.commit("setError", "");
-      try {
-        const res = await fetch("end-point-omitted");
-        if (res.status !== 200) {
-          throw new Error("Unable to fetch data");
-        }
-        const data = await res.json();
-        ctx.commit("setTodosData", data);
-        ctx.commit("setIsLoading", false);
-      } catch (err) {
-        console.log(err.message);
-        ctx.commit("setError", "Unable to fetch todo's list");
-        ctx.commit("setIsLoading", false);
-      }
-    },
-
-```
-
-Above: If the data is successfully returned it is committed to `setTodosData` within **mutations**, which in turn sets the data as the value of `state.todos`.
+**Note**: Application currently being refactored with refined workflows
 
 ## Updating Task to complete
 
-The workflow is triggered in the `TaskListOne` component when the user clicks on the task.
-Here the specific todo item is passed in giving access to it's properties:
-
-```js
-const handleComplete = (todo) => {
-  store.dispatch("toggleCompleteOne", todo);
-};
-```
-
-This dispatch triggers the `toggleCompleteOne` function within **actions**:
-
-```js
-async toggleCompleteOne(ctx, todo) {
-      try {
-        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
-          method: "PATCH",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ complete: !todo.complete }),
-        });
-        await ctx.dispatch("fetchTodoOne");
-      } catch (err) {
-        console.log(err.message);
-      }
-    },
-
-```
-
-In the above snippet, once the `PATCH` request has been successfully returned the action `fetchTodoOne` is dispatched, updating the state.todos array, which in turn provides the updated data globally to the application.
+**Note**: Application currently being refactored with refined workflows
 
 > A **Conditional class** is used to provide a strike-through text-decoration on completed tasks.
 
 ## Add new task workflow
 
-Starting in the `AddTaskOne` component, the user input is set as the value of the `text` property within the `newTodo` object. this object is dispatched to `addTodoOne` within **actions**:
-
-```js
-setup() {
-      const store = useStore();
-      const task = ref("");
-
-      const handleSubmit = () => {
-        const newTodo = {
-          id: Math.floor(Math.random() * 100000000 + 1),
-          text: task.value,
-          complete: false,
-          update: false,
-        };
-        store.dispatch("addTodoOne", newTodo);
-        task.value = "";
-      };
-
-      return { handleSubmit, task };
-
-```
-
-Below: The `addTodoOne` within actions takes in the `newTodo` as the second argument, once returned the `fetchTodoOne` action is dispatched to pull in the updated data, which if successfully returned is committed to **mutations** and set as the new value of `state.todos`
-
-```js
-async addTodoOne(ctx, newTodo) {
-      try {
-        await fetch("https://dev-test-api-one.herokuapp.com/todos", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify(newTodo),
-        });
-        await ctx.dispatch("fetchTodoOne");
-      } catch (err) {
-        console.log(err.message);
-      }
-    },
-
-```
+**Note**: Application currently being refactored with refined workflows
 
 ## Update todo text content workflow
 
-Within the `TaskListOne` component there is both a `<p>` tag to display the todo.text and a form with an `<input>` with a v-model. Only one of the above is shown at a time.
-
-As a default the `<p>` tag is displayed, showing the current value of the `todo.text`:
-
-![Screenshot from 2021-05-25 07-01-43](https://user-images.githubusercontent.com/73107656/119448490-51495000-bd29-11eb-9933-46deaf66016a.png)
-
-When the user clicks the edit icon this switches to show the `<input>` tag with a v-model for `todo.text`:
-
-![Screenshot from 2021-05-25 07-02-36](https://user-images.githubusercontent.com/73107656/119448709-9bcacc80-bd29-11eb-8ec0-7b4d5afc98a4.png)
-
-The user can either edit and save or cancel and go back.
-
-![Screenshot from 2021-05-25 07-03-19](https://user-images.githubusercontent.com/73107656/119448847-c9177a80-bd29-11eb-9e0c-5af7793cc1fd.png)
-
-The user edits the form and submits. This dispatches the `updateTodoTextOne` within **actions** passing in the todo to be updated:
-
-```js
-const handleUpdateText = (todo) => {
-  store.dispatch("updateTodoTextOne", todo);
-};
-```
-
-Below: The `updateTodoTextOne` within **actions**, which also dispatches the `fetchTodoOne` pulling in the updated data, which inturn commits the changes to **mutations** and assigns the updated data to the value of todos:
-
-```js
-// Actions
-
-async updateTodoTextOne(ctx, todo) {
-      try {
-        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
-          method: "PATCH",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({
-            update: !todo.update,
-            text: todo.text,
-            complete: false,
-          }),
-        });
-        await ctx.dispatch("fetchTodoOne");
-      } catch (err) {
-        console.log(err.message);
-      }
-    },
-
-// -------------------------------------------------------------
-
-// Actions
-
- async fetchTodoOne(ctx) {
-      ctx.commit("setIsLoading", true);
-      ctx.commit("setError", "");
-      try {
-        const res = await fetch("https://dev-test-api-one.herokuapp.com/todos");
-        if (res.status !== 200) {
-          throw new Error("Unable to fetch data");
-        }
-        const data = await res.json();
-        ctx.commit("setTodosData", data);
-        ctx.commit("setIsLoading", false);
-      } catch (err) {
-        console.log(err.message);
-        ctx.commit("setError", "Unable to fetch todo's list");
-        ctx.commit("setIsLoading", false);
-      }
-    },
-
-// ---------------------------------------------------------------------
-
-// Mutations
-
- mutations: {
-    setTodosData(state, data) {
-      state.todos = data;
-    },
-
-```
+**Note**: Application currently being refactored with refined workflows
 
 ## Getters - working with computed properties to filter todo lists
 

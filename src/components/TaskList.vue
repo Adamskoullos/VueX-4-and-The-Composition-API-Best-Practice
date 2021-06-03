@@ -55,7 +55,7 @@
     </div>
   </div>
   <!-- The below loader only shows on initial load while Heroku is spinning up after that while state.todos has a value it will not show -->
-  <div v-if="st.isLoading && !st.error">
+  <div v-if="st.isLoading && !st.error && !st.todos[0]">
     <Loader />
   </div>
   <!-- If there is an issue fetching data this message will show to let the user know -->
@@ -69,30 +69,29 @@
   import Loader from "../components/Loader";
 
   export default {
+    props: ["todo", "st"],
     components: { Loader },
-    setup() {
+    setup(props) {
       const store = useStore();
-      const st = store.state.todoTwo;
 
       const handleComplete = (todo) => {
-        store.dispatch("todoTwo/toggleComplete", todo);
+        store.dispatch(props.todo + "/toggleComplete", todo);
       };
 
       const handleDelete = (todo) => {
-        store.dispatch("todoTwo/deleteTodo", todo);
+        store.dispatch(props.todo + "/deleteTodo", todo);
       };
 
       const handleUpdate = (todo) => {
-        store.dispatch("todoTwo/updateTodo", todo);
+        store.dispatch(props.todo + "/updateTodo", todo);
       };
 
-      const handleUpdateText = (todo, text) => {
-        store.dispatch("todoTwo/updateTodoText", todo, text);
+      const handleUpdateText = (todo) => {
+        store.dispatch(props.todo + "/updateTodoText", todo);
       };
 
       return {
         handleComplete,
-        st,
         handleDelete,
         handleUpdate,
         handleUpdateText,
