@@ -233,7 +233,72 @@ mutations: {
 
 ## Updating Task to complete
 
-**Note**: Application currently being refactored with refined workflows
+This workflow starts in the `TaskList` component as the user clicks to complete a task. The todo is passed in so the id is available and the `toggleComplete` function is dispatched within **actions**:
+
+```js
+const handleComplete = (todo) => {
+  store.dispatch(props.todo + "/toggleComplete", todo);
+};
+```
+
+Below - within **actions**: A PATCH request is made grabbing the todo and toggling the `complete` state. This has now altered the state within the database but not yet within the store.
+
+```js
+async toggleComplete(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ complete: !todo.complete }),
+        });
+        await ctx.dispatch("fetchSingleTodo", todo);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+
+```
+
+Above: Once the todo has been updated within the database a further action is dispatched `fetchSingleTodo` with the todo passed in so as to access the todo.id.
+
+Below: The single todo is fetched, the existing state.todos is looped through using map to create an updated todos array. If the todo.id matches the data.id that particular todo is swapped out for the updated version (data), then the changes are committed to mutations passing in the updated todos array (newArr):
+
+```js
+async fetchSingleTodo(ctx, todo) {
+      try {
+        const res = await fetch(
+          "https://dev-test-api-one.herokuapp.com/todos/" + todo.id
+        );
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        const newArr = ctx.state.todos.map((todo) => {
+          if (todo.id == data.id) {
+            return data;
+          }
+          return todo;
+        });
+        ctx.commit("setTodosData", newArr);
+      } catch (err) {
+        console.log(err.message);
+        ctx.commit("setError", "Unable to access the data base at this time");
+      }
+    },
+
+```
+
+Below: The last part of the process to update state.todos:
+
+```js
+// mutations
+mutations: {
+    setTodosData(state, data) {
+      state.todos = data;
+    },
+```
+
+This extra step using `fetchSingleTodo` seems lengthy but allows only the necessary data to be pulled in and updated within the store. It provides a smoother experience for the user.
 
 > A **Conditional class** is used to provide a strike-through text-decoration on completed tasks.
 
