@@ -16,6 +16,18 @@ A Todo application mapping VueX processes for each CRUD workflow. The project to
 2. Each nested component to be reusable
 3. Only updating the Store with the minimum required data for each workflow, working with local state where suitable to make the user experience as fluid as possible
 
+---
+
+ToC - Core Patterns & Workflows:
+
+1. [VueX Modules & Reusable Components](#VueX-Modules-and-Reusable-Components)
+2. [Updating Task To Complete](#Updating-Task-To-Complete)
+3. [Add New Task Workflow](#Add-New-Task-Workflow)
+4. [Update Todo Text Content Workflow](#Update-Todo-Text-Content-Workflow)
+5. [Delete Todo Workflow](#Delete-Todo-Workflow)
+
+---
+
 ## Criteria
 
 1. Vue.js, VueX, Vue-router and SASS to be used
@@ -76,7 +88,7 @@ I did this and the process to build the two mock api's used for this project can
 
 # Development Stage
 
-## VueX Modules & Reusable Components
+## VueX Modules and Reusable Components
 
 There are a couple of key areas to note that allow effective module name spacing within reusable nested components:
 
