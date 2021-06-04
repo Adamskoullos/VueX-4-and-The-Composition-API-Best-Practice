@@ -1,4 +1,4 @@
-<div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/119489574-bc0f8100-bd53-11eb-8c75-21e9c3d17574.png" style="margin: 30px auto"></div>
+<div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/120801408-06a1b200-c539-11eb-8c83-ce2d985e223b.png" style="margin: 30px auto"></div>
 
 <br>
 
@@ -25,6 +25,7 @@ ToC - Core Patterns & Workflows:
 3. [Add New Task Workflow](#Add-New-Task-Workflow)
 4. [Update Todo Text Content Workflow](#Update-Todo-Text-Content-Workflow)
 5. [Delete Todo Workflow](#Delete-Todo-Workflow)
+6. [Getters](#Getters---working-with-computed-properties-to-filter-todo-lists)
 
 ---
 
