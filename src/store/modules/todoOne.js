@@ -81,7 +81,15 @@ export const todoOne = {
           headers: { "content-type": "application/json" },
           body: JSON.stringify(newTodo),
         });
-        await ctx.dispatch("fetchTodo");
+        const res = await fetch(
+          "https://dev-test-api-one.herokuapp.com/todos/" + newTodo.id
+        );
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        const newArr = [...ctx.state.todos, data];
+        ctx.commit("setTodosData", newArr);
       } catch (err) {
         console.log(err.message);
       }

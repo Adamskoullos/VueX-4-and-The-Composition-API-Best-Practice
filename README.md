@@ -298,13 +298,75 @@ mutations: {
     },
 ```
 
-This extra step using `fetchSingleTodo` seems lengthy but allows only the necessary data to be pulled in and updated within the store. It provides a smoother experience for the user.
+The `fetchSingleTodo` step ensures that any changes to store.state is coming directly from the database and not short cutting the process. This reduces the risk of inconsistency.
 
 > A **Conditional class** is used to provide a strike-through text-decoration on completed tasks.
 
 ## Add new task workflow
 
-**Note**: Application currently being refactored with refined workflows
+The workflow starts in the nested `AddTask` component. The user fills in the input and hits enter or clicks to add.
+The `handleSubmit` function creates a new task object and dispatches the new task object to the `addTodo` function within **actions**:
+
+```js
+export default {
+  props: ["todo"],
+  setup(props) {
+    const store = useStore();
+    const task = ref("");
+    // The below object: 'complete' is used to toggle check box and strike-through, 'update' is used to toggle input/<p> tag so the user can update task text
+    const handleSubmit = () => {
+      const newTodo = {
+        id: Math.floor(Math.random() * 100000000 + 1),
+        text: task.value,
+        complete: false,
+        update: false,
+      };
+      store.dispatch(props.todo + "/addTodo", newTodo);
+      task.value = "";
+    };
+
+    return { handleSubmit, task };
+  },
+};
+```
+
+Below is the `addTodo` function within **actions**: The new task is passed in (newTodo) and posted to the database. Once returned the new todo is fetched and a new array is created (newArr) spreading the existing state.todos and the new todo (data) into it.
+The changes are committed to **mutations** passing in `newArr`:
+
+```js
+
+async addTodo(ctx, newTodo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(newTodo),
+        });
+        const res = await fetch(
+          "https://dev-test-api-one.herokuapp.com/todos/" + newTodo.id
+        );
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        const newArr = [...ctx.state.todos, data];
+        ctx.commit("setTodosData", newArr);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+
+```
+
+Below: The updated todos array is set as the value of `state.todos`:
+
+```js
+mutations: {
+    setTodosData(state, data) {
+      state.todos = data;
+    },
+
+```
 
 ## Update todo text content workflow
 
