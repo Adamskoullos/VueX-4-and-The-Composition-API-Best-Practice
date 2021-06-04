@@ -6,6 +6,7 @@ export const todoTwo = {
       todos: [],
       isLoading: false,
       error: "",
+      filter: "all",
     };
   },
   mutations: {
@@ -17,6 +18,12 @@ export const todoTwo = {
     },
     setError(state, err) {
       state.error = err;
+    },
+    setUpdateTodo(state, boolean) {
+      state.updateTodo = boolean;
+    },
+    setFilter(state, input) {
+      state.filter = input;
     },
   },
   actions: {
@@ -112,7 +119,7 @@ export const todoTwo = {
       });
       ctx.commit("setTodosData", newArr);
     },
-    async updateTodoText(ctx, todo, text) {
+    async updateTodoText(ctx, todo) {
       try {
         await fetch("https://dev-test-api-two.herokuapp.com/todos/" + todo.id, {
           method: "PATCH",
@@ -128,6 +135,21 @@ export const todoTwo = {
         console.log(err.message);
       }
     },
+    filterTodoList(ctx, input) {
+      ctx.commit("setFilter", input);
+    },
   },
-  getters: {},
+  getters: {
+    filterTodos(state) {
+      if (state.filter == "all") {
+        return state.todos;
+      }
+      if (state.filter == "complete") {
+        return state.todos.filter((todo) => todo.complete);
+      }
+      if (state.filter == "incomplete") {
+        return state.todos.filter((todo) => todo.complete == false);
+      }
+    },
+  },
 };

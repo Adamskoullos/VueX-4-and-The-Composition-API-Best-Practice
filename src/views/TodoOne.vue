@@ -1,6 +1,7 @@
 <template>
   <div class="container-todo">
     <AddTask :todo="moduleOne" />
+    <FilterTabs :todo="moduleOne" :st="st" />
     <TaskList :todo="moduleOne" :st="st" />
   </div>
 </template>
@@ -9,10 +10,11 @@
   import { onBeforeMount, onUpdated, ref } from "@vue/runtime-core";
   import AddTask from "../components/AddTask.vue";
   import TaskList from "../components/TaskList.vue";
+  import FilterTabs from "../components/FilterTabs.vue";
   import { useStore } from "vuex";
 
   export default {
-    components: { AddTask, TaskList },
+    components: { AddTask, TaskList, FilterTabs },
     setup() {
       const store = useStore();
       const st = ref(store.state.todoOne);
@@ -23,11 +25,15 @@
       };
 
       onBeforeMount(() => {
-        fetchData();
+        if (!st.todos) {
+          fetchData();
+        }
       });
 
       onUpdated(() => {
-        fetchData();
+        if (!st.todos) {
+          fetchData();
+        }
       });
 
       return { store, moduleOne, st };

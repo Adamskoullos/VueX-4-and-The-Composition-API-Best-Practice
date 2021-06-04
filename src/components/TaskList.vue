@@ -1,7 +1,7 @@
 <template>
   <!-- Show the main content div if state has data and there is no error -->
   <div class="task-list" v-if="!st.isLoading && !st.error">
-    <div class="task" v-for="todo in st.todos" :key="todo.id">
+    <div class="task" v-for="todo in filterTodos" :key="todo.id">
       <p :class="{ strike: todo.complete }" v-if="!todo.update">
         {{ todo.text }}
       </p>
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+  import { computed } from "@vue/runtime-core";
   import { useStore } from "vuex";
   import Loader from "../components/Loader";
 
@@ -90,11 +91,16 @@
         store.dispatch(props.todo + "/updateTodoText", todo);
       };
 
+      const filterTodos = computed(() => {
+        return store.getters[props.todo + "/filterTodos"];
+      });
+
       return {
         handleComplete,
         handleDelete,
         handleUpdate,
         handleUpdateText,
+        filterTodos,
       };
     },
   };

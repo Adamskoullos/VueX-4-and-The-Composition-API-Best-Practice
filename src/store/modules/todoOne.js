@@ -6,6 +6,7 @@ export const todoOne = {
       todos: [],
       isLoading: false,
       error: "",
+      filter: "all",
     };
   },
   mutations: {
@@ -20,6 +21,9 @@ export const todoOne = {
     },
     setUpdateTodo(state, boolean) {
       state.updateTodo = boolean;
+    },
+    setFilter(state, input) {
+      state.filter = input;
     },
   },
   actions: {
@@ -131,6 +135,21 @@ export const todoOne = {
         console.log(err.message);
       }
     },
+    filterTodoList(ctx, input) {
+      ctx.commit("setFilter", input);
+    },
   },
-  getters: {},
+  getters: {
+    filterTodos(state) {
+      if (state.filter == "all") {
+        return state.todos;
+      }
+      if (state.filter == "complete") {
+        return state.todos.filter((todo) => todo.complete);
+      }
+      if (state.filter == "incomplete") {
+        return state.todos.filter((todo) => todo.complete == false);
+      }
+    },
+  },
 };
