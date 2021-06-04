@@ -99,7 +99,8 @@ export const todoOne = {
         await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
           method: "delete",
         });
-        await ctx.dispatch("fetchTodo");
+        const newArr = ctx.state.todos.filter((task) => task.id != todo.id);
+        ctx.commit("setTodosData", newArr);
       } catch (err) {
         console.log(err.message);
       }

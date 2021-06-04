@@ -457,4 +457,33 @@ async fetchSingleTodo(ctx, todo) {
 
 ## Delete Todo Workflow
 
+The workflow starts in the nested `TaskList` component when the user clicks on the trash icon to delete a task:
+
+```js
+const handleDelete = (todo) => {
+  store.dispatch(props.todo + "/deleteTodo", todo);
+};
+```
+
+Above: This dispatches the `deleteTodo` function within **actions** also passing in the todo to be deleted.
+
+Below: A delete request is made to the database, once returned a new array is created (newArr) using the `filter` method which excludes the deleted task.
+The changes are committed to **mutations** passing in the new array to update state.todos with:
+
+```js
+async deleteTodo(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "delete",
+        });
+        const newArr = ctx.state.todos.filter((task) => task.id != todo.id);
+        console.log(newArr);
+        ctx.commit("setTodosData", newArr);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+
+```
+
 ## Getters - working with computed properties to filter todo lists

@@ -78,7 +78,15 @@ export const todoTwo = {
           headers: { "content-type": "application/json" },
           body: JSON.stringify(newTodo),
         });
-        await ctx.dispatch("fetchTodo");
+        const res = await fetch(
+          "https://dev-test-api-two.herokuapp.com/todos/" + newTodo.id
+        );
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        const newArr = [...ctx.state.todos, data];
+        ctx.commit("setTodosData", newArr);
       } catch (err) {
         console.log(err.message);
       }
@@ -88,22 +96,21 @@ export const todoTwo = {
         await fetch("https://dev-test-api-two.herokuapp.com/todos/" + todo.id, {
           method: "delete",
         });
-        await ctx.dispatch("fetchTodo");
+        const newArr = ctx.state.todos.filter((task) => task.id != todo.id);
+        ctx.commit("setTodosData", newArr);
       } catch (err) {
         console.log(err.message);
       }
     },
-    async updateTodo(ctx, todo) {
-      try {
-        await fetch("https://dev-test-api-two.herokuapp.com/todos/" + todo.id, {
-          method: "PATCH",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ update: !todo.update }),
-        });
-        await ctx.dispatch("fetchTodo");
-      } catch (err) {
-        console.log(err.message);
-      }
+    updateTodo(ctx, todo) {
+      const newArr = ctx.state.todos.map((task) => {
+        if (task.id == todo.id) {
+          task.update = !task.update;
+          return task;
+        }
+        return task;
+      });
+      ctx.commit("setTodosData", newArr);
     },
     async updateTodoText(ctx, todo, text) {
       try {
@@ -116,7 +123,7 @@ export const todoTwo = {
             complete: false,
           }),
         });
-        await ctx.dispatch("fetchTodo");
+        await ctx.dispatch("fetchSingleTodo", todo);
       } catch (err) {
         console.log(err.message);
       }
