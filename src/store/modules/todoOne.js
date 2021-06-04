@@ -104,17 +104,15 @@ export const todoOne = {
         console.log(err.message);
       }
     },
-    async updateTodo(ctx, todo) {
-      try {
-        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
-          method: "PATCH",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ update: !todo.update }),
-        });
-        await ctx.dispatch("fetchTodo");
-      } catch (err) {
-        console.log(err.message);
-      }
+    updateTodo(ctx, todo) {
+      const newArr = ctx.state.todos.map((task) => {
+        if (task.id == todo.id) {
+          task.update = !task.update;
+          return task;
+        }
+        return task;
+      });
+      ctx.commit("setTodosData", newArr);
     },
     async updateTodoText(ctx, todo) {
       try {
@@ -127,7 +125,7 @@ export const todoOne = {
             complete: false,
           }),
         });
-        await ctx.dispatch("fetchTodo");
+        await ctx.dispatch("fetchSingleTodo", todo);
       } catch (err) {
         console.log(err.message);
       }

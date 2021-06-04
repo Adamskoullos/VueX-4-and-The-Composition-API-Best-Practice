@@ -1,12 +1,6 @@
-<div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/119489513-ad28ce80-bd53-11eb-9894-9d411d6d6ead.png" style="margin: 30px auto"></div>
-
-<br><br>
-
 <div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/119489574-bc0f8100-bd53-11eb-8c75-21e9c3d17574.png" style="margin: 30px auto"></div>
 
-<br><br>
-
-<div style="width: 100%; display: flex;"><img src="https://user-images.githubusercontent.com/73107656/119497254-4360f280-bd5c-11eb-8fe9-cca2f62bafc2.png" style="margin: 30px auto"></div>
+<br>
 
 # [Live Link](https://vues-crud-workflows.netlify.app/)
 
@@ -179,7 +173,7 @@ The below example comes from the template of the `TaskList` component. Note how 
 
 The above is how the reusable nested component `TaskList` can render todo lists from different modules, depending on the parent component and what the value of `st` is when it is passed down.
 
-## Fetching data on initial load
+## Fetching Data On Initial Load
 
 The below code snippet is within the script of the `TodoOne` view. Before the component mounts the DOM `fetchData()` is invoked which dispatches the `fetchTodo` function within **actions**, within the `todoOne` module:
 
@@ -231,7 +225,7 @@ mutations: {
 
 ```
 
-## Updating Task to complete
+## Updating Task To Complete
 
 This workflow starts in the `TaskList` component as the user clicks to complete a task. The todo is passed in so the id is available and the `toggleComplete` function is dispatched within **actions**:
 
@@ -302,7 +296,7 @@ The `fetchSingleTodo` step ensures that any changes to store.state is coming dir
 
 > A **Conditional class** is used to provide a strike-through text-decoration on completed tasks.
 
-## Add new task workflow
+## Add New Task Workflow
 
 The workflow starts in the nested `AddTask` component. The user fills in the input and hits enter or clicks to add.
 The `handleSubmit` function creates a new task object and dispatches the new task object to the `addTodo` function within **actions**:
@@ -368,10 +362,99 @@ mutations: {
 
 ```
 
-## Update todo text content workflow
+## Update Todo Text Content Workflow
 
-**Note**: Application currently being refactored with refined workflows
+This workflow has two parts to it. The first being the toggle between showing the user the editable input and the fixed task. The second saving any user updates to the database and rendering the updated data to the DOM.
+
+This first part is a great example of when working with local state is a good option. Each todo has an `update` property set to false within the database. Locally this is toggled when a user clicks the edit todo icon and toggled back when they click the backward icon. This is not data to be updated and saved within the database, rather data used locally to manipulate the DOM.
+
+Both the above icons have the `handleSubmit` callback triggered on a click event, which dispatches the `updateTodo` function within **actions**:
+
+```js
+const handleUpdate = (todo) => {
+  store.dispatch(props.todo + "/updateTodo", todo);
+};
+```
+
+Below: Note how this is the first action that is not asynchronous, however the workflow still follows the core VueX process.
+The user clicks to edit and the edit input form is displayed. From here they can either cancel and go back or edit and save:
+
+```js
+updateTodo(ctx, todo) {
+      const newArr = ctx.state.todos.map((task) => {
+        if (task.id == todo.id) {
+          task.update = !task.update;
+          return task;
+        }
+        return task;
+      });
+      ctx.commit("setTodosData", newArr);
+    },
+
+```
+
+Below: If the user edits and hits save the second part of the workflow is triggered via the `handleUpdateText` callback.
+This dispatches the `updateTodoText` function within **actions**, passing in the todo:
+
+```js
+const handleUpdateText = (todo) => {
+  store.dispatch(props.todo + "/updateTodoText", todo);
+};
+```
+
+Below: The todo is grabbed from the database and a PATCH request updates the object. This sets the `update` property back to false, assigns the updated todo text and sets the todo property `complete` to false. Once returned the `fetchSingleTodo` **action** is dispatched passing in the todo in order to access its id:
+
+```js
+
+// actions
+async updateTodoText(ctx, todo) {
+      try {
+        await fetch("https://dev-test-api-one.herokuapp.com/todos/" + todo.id, {
+          method: "PATCH",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            update: !todo.update,
+            text: todo.text,
+            complete: false,
+          }),
+        });
+        await ctx.dispatch("fetchSingleTodo", todo);
+      } catch (err) {
+        console.log(err.message);
+      }
+    },
+
+```
+
+Below: The updated todo is fetched from the database and a new updated todos array is created using map. The updated todos array is committed to **mutations** and from there set as the value of `state.todos`
+
+```js
+
+// actions
+async fetchSingleTodo(ctx, todo) {
+      try {
+        const res = await fetch(
+          "https://dev-test-api-one.herokuapp.com/todos/" + todo.id
+        );
+        if (res.status !== 200) {
+          throw new Error("Unable to fetch data");
+        }
+        const data = await res.json();
+        const newArr = ctx.state.todos.map((todo) => {
+          if (todo.id == data.id) {
+            return data;
+          }
+          return todo;
+        });
+        ctx.commit("setTodosData", newArr);
+      } catch (err) {
+        console.log(err.message);
+        ctx.commit("setError", "Unable to access the data base at this time");
+      }
+    },
+
+```
+
+## Delete Todo Workflow
 
 ## Getters - working with computed properties to filter todo lists
-
-This section is a work in progress
