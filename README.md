@@ -29,19 +29,6 @@ ToC - Core Patterns & Workflows:
 
 ---
 
-## Criteria
-
-1. Vue.js, VueX, Vue-router and SASS to be used
-2. Three page application:
-   - Todo 1:
-     - Home page redirected
-   - Todo 2
-   - 404 page
-3. No CSS/font-end libraries
-4. No component libraries
-5. Built to design specification
-6. Code comments used to clearly explain what the code is doing
-
 # Planning
 
 1. Identify and model the core VueX workflows
