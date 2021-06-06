@@ -87,6 +87,8 @@ I did this and the process to build the two mock api's used for this project can
 
 - https://github.com/Adamskoullos/mock-api-two
 
+---
+
 # Development Stage
 
 ## VueX Modules and Reusable Components
@@ -186,6 +188,8 @@ The below example comes from the template of the `TaskList` component. Note how 
 
 The above is how the reusable nested component `TaskList` can render todo lists from different modules, depending on the parent component and what the value of `st` is when it is passed down.
 
+---
+
 ## Fetching Data On Initial Load
 
 The below code snippet is within the script of the `TodoOne` view. Before the component mounts the DOM `fetchData()` is invoked which dispatches the `fetchTodo` function within **actions**, within the `todoOne` module:
@@ -237,6 +241,8 @@ mutations: {
     },
 
 ```
+
+---
 
 ## Updating Task To Complete
 
@@ -309,6 +315,8 @@ The `fetchSingleTodo` step ensures that any changes to store.state is coming dir
 
 > A **Conditional class** is used to provide a strike-through text-decoration on completed tasks.
 
+---
+
 ## Add New Task Workflow
 
 The workflow starts in the nested `AddTask` component. The user fills in the input and hits enter or clicks to add.
@@ -374,6 +382,8 @@ mutations: {
     },
 
 ```
+
+---
 
 ## Update Todo Text Content Workflow
 
@@ -468,6 +478,8 @@ async fetchSingleTodo(ctx, todo) {
 
 ```
 
+---
+
 ## Delete Todo Workflow
 
 The workflow starts in the nested `TaskList` component when the user clicks on the trash icon to delete a task:
@@ -498,6 +510,8 @@ async deleteTodo(ctx, todo) {
     },
 
 ```
+
+---
 
 ## Getters - working with computed properties to filter todo lists
 
