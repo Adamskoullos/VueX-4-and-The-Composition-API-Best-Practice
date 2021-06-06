@@ -504,7 +504,7 @@ async deleteTodo(ctx, todo) {
 The below example includes a single getter that returns a filtered todo list depending on the user input. There are a few moving parts here:
 
 1. A getter that takes in a string argument used as a flag that returns a filtered todo list of either complete, incomplete or all.
-2. A `filter` property within the store.state of each module that has a string value that is altered by filter tabs within the `FilterTabs` nested component. These tabs change the string value of `filter` which in turn changes the argument passed into the **getter** which alters the value of what the getter returns.
+2. A `filter` property within the store.state of each module that has a string value that is altered by filter tabs within the `FilterTabs` nested component. These tabs change the string value of `filter` which in turn alters the value of what the getter returns.
 3. The getter is accessed via a computed property within the `TaskList` component which is used within the template within the `v-for` loop.
 
 Here is the worklfow:
