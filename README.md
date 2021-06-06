@@ -500,3 +500,103 @@ async deleteTodo(ctx, todo) {
 ```
 
 ## Getters - working with computed properties to filter todo lists
+
+The below example includes a single getter that returns a filtered todo list depending on the user input. There are a few moving parts here:
+
+1. A getter that takes in a string argument used as a flag that returns a filtered todo list of either complete, incomplete or all.
+2. A `filter` property within the store.state of each module that has a string value that is altered by filter tabs within the `FilterTabs` nested component. These tabs change the string value of `filter` which in turn changes the argument passed into the **getter** which alters the value of what the getter returns.
+3. The getter is accessed via a computed property within the `TaskList` component which is used within the template within the `v-for` loop.
+
+Here is the worklfow:
+
+The user clicks one of the filter tabs to show a filtered todo list. This triggers the `handleFilter` callback, which dispatches the `filterTodoList` function within **actions**, passing in the input.
+
+The below snippet shows the template and script for the `FilterTabs` component:
+
+```html
+<!-- handleFilter function passing in the string flag -->
+<template>
+  <div class="filter-buttons">
+    <span
+      class="material-icons outline"
+      :class="{ activeTab: st.filter == 'incomplete' }"
+      @click="handleFilter('incomplete')"
+      >check_box_outline_blank</span
+    >
+    <span
+      class="material-icons outline"
+      :class="{ activeTab: st.filter == 'complete' }"
+      @click="handleFilter('complete')"
+      >check_box</span
+    >
+    <span
+      class="material-icons-outlined outline"
+      :class="{ activeTab: st.filter == 'all' }"
+      @click="handleFilter('all')"
+    >
+      all_inclusive
+    </span>
+  </div>
+</template>
+```
+
+```js
+setup(props) {
+      const store = useStore();
+      const handleFilter = (input) => {
+        store.dispatch(props.todo + "/filterTodoList", input);
+      };
+
+      return { handleFilter };
+    },
+
+```
+
+Below: The `filterTodoList` function within **actions** is not asynchronous and simply `commits` the changes to be made up to **mutations** passing in the string flag:
+
+```js
+// actions
+filterTodoList(ctx, input) {
+      ctx.commit("setFilter", input);
+    },
+
+// mutations
+setFilter(state, input) {
+      state.filter = input;
+    },
+
+```
+
+Now the value of `filter` within store.state has been set to the relevant string flag by the user, lets see how this flag effects what the getter returns:
+
+```js
+getters: {
+    filterTodos(state) {
+      if (state.filter == "all") {
+        return state.todos;
+      }
+      if (state.filter == "complete") {
+        return state.todos.filter((todo) => todo.complete);
+      }
+      if (state.filter == "incomplete") {
+        return state.todos.filter((todo) => todo.complete == false);
+      }
+    },
+  },
+
+
+```
+
+To access the getter and its returned value within the `TaskList` component where the value is rendered to the DOM, we create a computed property that returns the getter's returned value:
+
+```js
+const filterTodos = computed(() => {
+  return store.getters[props.todo + "/filterTodos"];
+});
+```
+
+We then return the computed property from the `setup()` function so we can access it within the template:
+
+```html
+<div class="task" v-for="todo in filterTodos" :key="todo.id"></div>
+```
