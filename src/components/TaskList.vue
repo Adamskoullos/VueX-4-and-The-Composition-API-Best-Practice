@@ -60,7 +60,7 @@
   </div>
   <!-- If there is an issue fetching data this message will show to let the user know -->
   <div v-if="st.error" class="error">
-    <h1>Sorry, unable to fetch todo list at this time</h1>
+    <h1>{{ st.error }}</h1>
   </div>
 </template>
 

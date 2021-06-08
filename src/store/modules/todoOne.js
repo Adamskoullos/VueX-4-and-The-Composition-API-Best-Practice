@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const todoOne = {
   namespaced: true,
 
@@ -32,16 +34,30 @@ export const todoOne = {
       ctx.commit("setIsLoading", true);
       ctx.commit("setError", "");
       try {
-        const res = await fetch("https://dev-test-api-one.herokuapp.com/todos");
-        if (res.status !== 200) {
-          throw new Error("Unable to fetch data");
-        }
-        const data = await res.json();
-        ctx.commit("setTodosData", data);
+        const res = await axios.get(
+          "https://dev-test-api-one.herokuapp.com/todos"
+        );
+        ctx.commit("setTodosData", res.data);
         ctx.commit("setIsLoading", false);
-      } catch (err) {
-        console.log(err.message);
-        ctx.commit("setError", "Unable to fetch todo's list");
+      } catch (error) {
+        if (error.request) {
+          // Code to run...
+          console.log(error.message);
+          console.log(error.request);
+        } else if (error.response) {
+          // Code to run...
+          console.log(error.message);
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.statusText);
+          console.log(error.response.headers);
+          console.log(error.toJSON);
+        } else {
+          // Code to run...
+          console.log(error.message);
+          console.log(error.toJSON);
+        }
+        ctx.commit("setError", "Sorry, unable to fetch todo list at this time");
         ctx.commit("setIsLoading", false);
       }
     },
