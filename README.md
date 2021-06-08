@@ -194,6 +194,7 @@ onBeforeMount(() => {
 The below snippet is the `fetchTodo` within **actions**:
 
 ```js
+// Fetch
 async fetchTodo(ctx) {
       ctx.commit("setIsLoading", true);
       ctx.commit("setError", "");
@@ -208,6 +209,37 @@ async fetchTodo(ctx) {
       } catch (err) {
         console.log(err.message);
         ctx.commit("setError", "Unable to fetch todo's list");
+        ctx.commit("setIsLoading", false);
+      }
+    },
+
+// Axios
+async fetchTodo(ctx) {
+      ctx.commit("setIsLoading", true);
+      ctx.commit("setError", "");
+      try {
+        const res = await axios.get(
+          "URL"
+        );
+        ctx.commit("setTodosData", res.data);
+        ctx.commit("setIsLoading", false);
+      } catch (error) {
+          console.log(error.message);
+        if (error.request) {
+          // Code to run...
+          console.log(error.request);
+        } else if (error.response) {
+          // Code to run...
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.statusText);
+          console.log(error.response.headers);
+          console.log(error.toJSON);
+        } else {
+          // Code to run...
+          console.log(error.toJSON);
+        }
+        ctx.commit("setError", "Sorry, unable to fetch todo list at this time");
         ctx.commit("setIsLoading", false);
       }
     },
@@ -251,7 +283,7 @@ async toggleComplete(ctx, todo) {
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ complete: !todo.complete }),
         });
-        await ctx.dispatch("fetchSingleTodo", todo);
+        ctx.dispatch("fetchSingleTodo", todo);
       } catch (err) {
         console.log(err.message);
       }
@@ -428,7 +460,7 @@ async updateTodoText(ctx, todo) {
             complete: false,
           }),
         });
-        await ctx.dispatch("fetchSingleTodo", todo);
+        ctx.dispatch("fetchSingleTodo", todo);
       } catch (err) {
         console.log(err.message);
       }
