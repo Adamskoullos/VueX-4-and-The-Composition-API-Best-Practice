@@ -410,7 +410,7 @@ This workflow has two parts to it. The first being the toggle between showing th
 
 This first part is a great example of when working with local state is a good option. Each todo has an `update` property set to false within the database. Locally this is toggled when a user clicks the edit todo icon and toggled back when they click the backward icon. This is not data to be updated and saved within the database, rather data used locally to manipulate the DOM.
 
-Both the above icons have the `handleSubmit` callback triggered on a click event, which dispatches the `updateTodo` function within **actions**:
+Both the above icons have the `handleUpdate` callback triggered on a click event, which dispatches the `updateTodo` function within **actions**:
 
 ```js
 const handleUpdate = (todo) => {
